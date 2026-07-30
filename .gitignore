@@ -1,0 +1,28 @@
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environment variables
+.env
+
+# ChromaDB
+backend/vector_db/
+
+# Uploaded PDFs
+backend/data/pdfs/
+
+# Python cache
+.pytest_cache/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# IDE
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
