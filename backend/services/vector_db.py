@@ -13,10 +13,8 @@ model = SentenceTransformer("BAAI/bge-small-en-v1.5")
 
 def store_chunks(chunks, filename):
 
-    # Remove old chunks of the same file
-    existing = collection.get(
-        where={"filename": filename}
-    )
+    # Remove ALL previously uploaded documents
+    existing = collection.get()
 
     if existing["ids"]:
         collection.delete(ids=existing["ids"])

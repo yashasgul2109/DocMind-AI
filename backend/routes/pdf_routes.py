@@ -22,9 +22,20 @@ async def upload_pdf(file: UploadFile = File(...)):
 
     text = extract_text_from_pdf(file_path)
 
+    print("\n========== EXTRACTED TEXT ==========")
+    print(text[:3000])          # First 3000 characters
+    print("===================================")
+    print(f"Characters extracted: {len(text)}")
+
     chunks = chunk_text(text)
 
-    store_chunks(chunks , file.filename)
+    print(f"\nTotal Chunks: {len(chunks)}")
+
+    for i, chunk in enumerate(chunks):
+        print(f"\n------ CHUNK {i} ------")
+        print(chunk[:500])
+
+    store_chunks(chunks, file.filename)
 
     return {
         "filename": file.filename,
