@@ -10,20 +10,7 @@ function Sidebar() {
 
       <UploadBox />
 
-      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">
-        Uploaded Files
-      </h2>
-
       <div className="space-y-2">
-        <div className="flex items-center gap-2 rounded-lg bg-slate-800 p-3">
-          <FileText size={18} />
-          <span>Math.pdf</span>
-        </div>
-
-        <div className="flex items-center gap-2 rounded-lg bg-slate-800 p-3">
-          <FileText size={18} />
-          <span>Physics.pdf</span>
-        </div>
       </div>
     </div>
   );

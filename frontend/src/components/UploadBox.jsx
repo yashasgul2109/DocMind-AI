@@ -4,45 +4,55 @@ import api from "../services/api";
 
 function UploadBox() {
   const inputRef = useRef(null);
+
   const [file, setFile] = useState(null);
   const [dragging, setDragging] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
-const [uploading, setUploading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
-const handleFile = async (selectedFile) => {
-  if (!selectedFile) return;
+  const handleFile = async (selectedFile) => {
+    if (!selectedFile) return;
 
-  if (selectedFile.type !== "application/pdf") {
-    alert("Please upload a PDF");
-    return;
-  }
+    if (selectedFile.type !== "application/pdf") {
+      setError("Please upload a PDF file.");
+      return;
+    }
 
-  setFile(selectedFile);
+    setFile(selectedFile);
+    setError("");
+    setMessage("");
 
-  const formData = new FormData();
-  formData.append("file", selectedFile);
+    const formData = new FormData();
+    formData.append("file", selectedFile);
 
-  try {
-    setUploading(true);
+    try {
+      setUploading(true);
 
-    const response = await api.post("/upload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+      const response = await api.post("/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-    console.log(response.data);
-    alert("PDF Uploaded Successfully!");
-  } catch (err) {
-    console.error(err);
-    alert("Upload Failed");
-  } finally {
-    setUploading(false);
-  }
-};
+      console.log(response.data);
+
+      setMessage(
+        `${response.data.filename} uploaded successfully (${response.data.chunks} chunks stored)`
+      );
+    } catch (err) {
+      console.error(err);
+
+      setError("Upload Failed. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   return (
     <div className="space-y-4">
+
       <div
         onClick={() => inputRef.current.click()}
         onDragOver={(e) => {
@@ -86,15 +96,42 @@ const handleFile = async (selectedFile) => {
 
       {file && (
         <div className="flex items-center gap-3 rounded-lg bg-slate-800 p-3">
-          <FileText className="text-green-400" />
+          <FileText className="text-green-400" size={28} />
+
           <div>
-            <p>{file.name}</p>
+            <p className="font-medium">{file.name}</p>
+
             <p className="text-xs text-slate-400">
-              {(file.size / 1024).toFixed(1)} KB
+              {(file.size / 1024).toFixed(2)} KB
             </p>
           </div>
         </div>
       )}
+
+      {uploading && (
+        <div className="rounded-lg bg-blue-900/20 border border-blue-500 p-3">
+          <p className="text-blue-400">
+            ⏳ Uploading PDF...
+          </p>
+        </div>
+      )}
+
+      {message && (
+        <div className="rounded-lg bg-green-900/20 border border-green-500 p-3">
+          <p className="text-green-400">
+            ✅ {message}
+          </p>
+        </div>
+      )}
+
+      {error && (
+        <div className="rounded-lg bg-red-900/20 border border-red-500 p-3">
+          <p className="text-red-400">
+            ❌ {error}
+          </p>
+        </div>
+      )}
+
     </div>
   );
 }
