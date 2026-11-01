@@ -1,5 +1,11 @@
-function Message({ sender, text }) {
+
+function Message({ sender, text, image }) {
   const isUser = sender === "user";
+
+  // Backend image URL
+const imageUrl = image
+  ? `http://127.0.0.1:8000/chat-images/${image.image_path.split(/[\\/]/).pop()}`
+  : null;
 
   return (
     <div className={`mb-6 flex ${isUser ? "justify-end" : "justify-start"}`}>
@@ -10,7 +16,17 @@ function Message({ sender, text }) {
             : "bg-slate-800"
         }`}
       >
-        {text}
+
+        {imageUrl && (
+          <img
+            src={imageUrl}
+            alt="Uploaded attachment"
+            className="mb-3 max-h-64 max-w-full rounded-lg object-contain"
+          />
+        )}
+
+        {text && <p className="whitespace-pre-wrap">{text}</p>}
+
       </div>
     </div>
   );

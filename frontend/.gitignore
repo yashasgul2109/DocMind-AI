@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Uploaded and generated image data
+backend/data/chat_images/
+backend/data/extracted_images/
+
+# Other generated data
+backend/data/**/*.db
+backend/data/**/*.sqlite
